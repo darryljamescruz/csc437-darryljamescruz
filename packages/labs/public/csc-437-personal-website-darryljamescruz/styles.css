@@ -1,0 +1,89 @@
+@import url('tokens.css');
+
+/* Body Styles */
+body {
+    font-family: var(--font-family-body);
+    background-color: var(--color-background);
+    color: white;
+}
+
+/* Header Styles */
+header {
+    background-color: var(--color-header-footer);
+    border-bottom: 2px solid var(--color-heading);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    font-size: 1.5em;
+}
+
+header .container span {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading);
+}
+
+header nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header nav ul li {
+    margin-left: 1rem;
+}
+
+header nav ul li a {
+    text-decoration: none;
+    color: var(--color-heading);
+    font-weight: var(--font-weight-bold);
+}
+
+/* Section Styles */
+section {
+    background-color: var(--color-section);
+}
+
+/* Main Styles */
+#main {
+    background-color: var(--color-main);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+#main h1 {
+    color: var(--color-main-heading); 
+}
+
+.left-column, .right-column {
+    padding: 1rem;
+}
+
+/* Heading Styles */
+h1, h2 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-heading);
+}
+
+/* Link Styles */
+a:link {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--color-link-visited);
+}
+
+a:hover {
+    color: var(--color-link-hover);
+    text-decoration: underline;
+}

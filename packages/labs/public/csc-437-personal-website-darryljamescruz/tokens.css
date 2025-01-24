@@ -1,0 +1,14 @@
+:root {
+    --color-background: #2F3438;
+    --color-header-footer: #1F2529;
+    --color-section: #3B4045;
+    --color-main: #3B4045;
+    --color-main-heading: #FF8C42;
+    --color-heading: #FFD700;
+    --color-link: #448361;
+    --color-link-visited: #367347;
+    --color-link-hover: #56C472;
+    --font-family-body: "Lucida Console", monospace;
+    --font-family-heading: "Courier New", monospace;
+    --font-weight-bold: bold;
+}
