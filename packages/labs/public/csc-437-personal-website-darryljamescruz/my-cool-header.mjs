@@ -9,14 +9,15 @@ TEMPLATE.innerHTML = `
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem;
-            font-size: 1.5em;
+            font-size: 1.0em;
+            padding: 0.5rem;
         }
         .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
+            padding: inherit;
         }
         nav {
             display: flex;
@@ -43,6 +44,10 @@ TEMPLATE.innerHTML = `
         }
         .menu-button {
             display: none;
+            background: none;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
         }
         @media (max-width: 768px) {
             nav ul {
@@ -56,7 +61,7 @@ TEMPLATE.innerHTML = `
     </style>
     <header>
         <div class="container">
-            <h1>Main Navigation</h1>
+            <h1>Darryl James Cruz</h1>
             <nav>
                 <button class="menu-button">Menu</button>
                 <ul>
@@ -76,6 +81,7 @@ class MyCoolHeader extends HTMLElement {
 
         // Toggle the visibility of the nav links
         menuButton.addEventListener('click', () => {
+            console.log('Menu button clicked'); // Debugging statement
             const isVisible = navLinks.style.display === 'flex';
             navLinks.style.display = isVisible ? 'none' : 'flex';
         });
@@ -84,6 +90,15 @@ class MyCoolHeader extends HTMLElement {
         document.addEventListener('click', (event) => {
             const isClickInside = this.contains(event.composedPath()[0]);
             if (!isClickInside) {
+                navLinks.style.display = 'none';
+            }
+        });
+
+        // Reset nav links display on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                navLinks.style.display = 'flex';
+            } else {
                 navLinks.style.display = 'none';
             }
         });

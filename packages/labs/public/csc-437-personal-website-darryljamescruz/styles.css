@@ -17,7 +17,6 @@ header .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
     font-size: 1.5em;
 }
 
@@ -59,7 +58,7 @@ section {
 #main {
     background-color: var(--color-main);
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 0.5fr 1fr;
     gap: 1rem;
     padding: 1rem;
 }
@@ -92,4 +91,16 @@ a:visited {
 a:hover {
     color: var(--color-link-hover);
     text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) 
+{
+    #main {
+        display: flex;
+        flex-direction: column;
+    }
+    .left-column, .right-column {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 }

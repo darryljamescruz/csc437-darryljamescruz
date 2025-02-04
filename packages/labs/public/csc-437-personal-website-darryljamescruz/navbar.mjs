@@ -4,7 +4,7 @@ function createHeader() {
     const headerHTML = `
         <header>
             <div class="container">
-                <h1>Main Navigation</h1>
+                <h1>Darryl's Personal Website</h1>
                 <nav>
                     <ul>
                         <li><a href="index.html">Home</a></li>
