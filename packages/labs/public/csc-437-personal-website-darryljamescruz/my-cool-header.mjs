@@ -10,7 +10,7 @@ TEMPLATE.innerHTML = `
             justify-content: space-between;
             align-items: center;
             padding: 1rem;
-            font-size: 1em;
+            font-size: 1.25em;
         }
         .container {
             display: flex;
@@ -49,7 +49,6 @@ TEMPLATE.innerHTML = `
         }
 
         nav {
-            margin-top: 1rem; /* Add space between h1 and nav */
         }
 
         nav ul {
@@ -64,6 +63,7 @@ TEMPLATE.innerHTML = `
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="winter_schedule.html">Winter 2025 Schedule</a></li>
+                    <li><a href="resume.html">Course Resume</a></li>
                 </ul>
             </nav>
         </div>
