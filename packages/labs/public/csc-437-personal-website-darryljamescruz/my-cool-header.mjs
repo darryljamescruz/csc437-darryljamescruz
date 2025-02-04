@@ -28,9 +28,7 @@ TEMPLATE.innerHTML = `
             margin: 0;
             padding: 0;
         }
-        nav ul li {
-            margin-left: 1rem;
-        }
+
         nav ul li a {
             text-decoration: none;
             color: var(--color-heading);
@@ -42,23 +40,32 @@ TEMPLATE.innerHTML = `
             text-decoration: underline;
         }
 
+        .menu-button {
+            display: none;
+        }
+            
+
         @media (max-width: 768px) {
         .container {
             flex-direction: column; /* Stack elements vertically */
             align-items: flex-start; /* Align items to the start */
         }
-
-        nav {
-        }
-
+        
         nav ul {
             flex-direction: column;
+            display: none;  /* Hidden by default on mobile */
         }
+        
+        .menu-button {
+            display: block;
+        }
+        
     }
     </style>
     <header>
         <div class="container">
             <h1>Darryl James Cruz</h1>
+            <button class="menu-button">Menu</button>
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -73,7 +80,33 @@ TEMPLATE.innerHTML = `
 class MyCoolHeader extends HTMLElement {
     connectedCallback() {
         const shadowRoot = attachShadow(this, TEMPLATE);
+        const menuButton = shadowRoot.querySelector('.menu-button');
+        const navLinks = shadowRoot.querySelector('nav ul');
 
+        // Toggle the visibility of the nav links
+        menuButton.addEventListener('click', () => {
+            const isVisible = navLinks.style.display === 'block';
+            navLinks.style.display = isVisible ? 'none' : 'block';
+        });
+
+        // Close the menu when clicking outside the header
+        document.addEventListener('click', (event) => {
+            const path = event.composedPath();
+            const isClickInside = path.includes(this);
+            if (!isClickInside) {
+                navLinks.style.display = 'none';
+            }
+        });
+
+
+        // Reset nav links display on window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                navLinks.style.display = 'flex';
+            } else {
+                navLinks.style.display = 'none';
+            }
+        });
     }
 }
 
