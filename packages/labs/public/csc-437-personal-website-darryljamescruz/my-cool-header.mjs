@@ -91,6 +91,7 @@ TEMPLATE.innerHTML = `
     <header>
         <div class="container">
             <div class="header-row">    
+                <h1>Darryl James Cruz</h1>
                 <button class="menu-button">Menu</button>
             </div>
             <nav>
