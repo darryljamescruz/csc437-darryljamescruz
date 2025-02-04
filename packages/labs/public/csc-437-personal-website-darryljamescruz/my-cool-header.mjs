@@ -93,19 +93,19 @@ TEMPLATE.innerHTML = `
         <div class="container">
             <div class="header-row">    
                 <h1>Darryl James Cruz</h1>
-                <div style="display: flex; align-items: center;">
-                    <button class="menu-button">Menu</button>
-                </div>
-            </div>
-            <label>
+
+                    <label>
                 <input type="checkbox" class="light-mode-toggle" autocomplete="off">
                 Light mode
-            </label>
+                </label>
+                <button class="menu-button">Menu</button>
+            </div>
+
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="winter_schedule.html">Winter 2025 Schedule</a></li>
-                    <li><a href="resume.html">Course Resume</a></li>
+                    <!--<li><a href="resume.html">Course Resume</a></li>-->
                 </ul>
             </nav>
 
@@ -120,23 +120,7 @@ class MyCoolHeader extends HTMLElement {
         const navLinks = shadowRoot.querySelector('nav ul');
         const lightModeToggle = shadowRoot.querySelector('.light-mode-toggle');
 
-        // Initialize light mode from localStorage
-        const isLightMode = localStorage.getItem('lightMode') === 'true';
-        lightModeToggle.checked = isLightMode;
-        if (isLightMode) {
-            document.body.classList.add('light-mode');
-        }
 
-        // Handle light mode toggle
-        lightModeToggle.addEventListener('change', () => {
-            if (lightModeToggle.checked) {
-                document.body.classList.add('light-mode');
-                localStorage.setItem('lightMode', 'true');
-            } else {
-                document.body.classList.remove('light-mode');
-                localStorage.setItem('lightMode', 'false');
-            }
-        });
 
         // Toggle the visibility of the nav links
         menuButton.addEventListener('click', () => {
@@ -159,6 +143,24 @@ class MyCoolHeader extends HTMLElement {
                 navLinks.style.display = 'flex';
             } else {
                 navLinks.style.display = 'none';
+            }
+        });
+
+        // Initialize light mode from localStorage
+        const isLightMode = localStorage.getItem('lightMode') === 'true';
+        lightModeToggle.checked = isLightMode;
+        if (isLightMode) {
+            document.body.classList.add('light-mode');
+        }
+
+        // Handle light mode toggle
+        lightModeToggle.addEventListener('change', () => {
+            if (lightModeToggle.checked) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('lightMode', 'true');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('lightMode', 'false');
             }
         });
     }
