@@ -44,6 +44,12 @@ header nav ul li a {
     font-weight: var(--font-weight-bold);
 }
 
+header nav ul li a.active {
+    color: var(--color-link-hover);
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 /* Section Styles */
 section {
     background-color: var(--color-section);
