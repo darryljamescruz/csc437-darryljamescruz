@@ -9,15 +9,14 @@ TEMPLATE.innerHTML = `
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 1.0em;
-            padding: 0.5rem;
+            padding: 1rem;
+            font-size: 1em;
         }
         .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
-            padding: inherit;
         }
         nav {
             display: flex;
@@ -42,28 +41,26 @@ TEMPLATE.innerHTML = `
             font-weight: bold;
             text-decoration: underline;
         }
-        .menu-button {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1em;
-            cursor: pointer;
-        }
+
         @media (max-width: 768px) {
-            nav ul {
-                display: none;
-                flex-direction: column;
-            }
-            .menu-button {
-                display: block;
-            }
+        .container {
+            flex-direction: column; /* Stack elements vertically */
+            align-items: flex-start; /* Align items to the start */
         }
+
+        nav {
+            margin-top: 1rem; /* Add space between h1 and nav */
+        }
+
+        nav ul {
+            flex-direction: column;
+        }
+    }
     </style>
     <header>
         <div class="container">
             <h1>Darryl James Cruz</h1>
             <nav>
-                <button class="menu-button">Menu</button>
                 <ul>
                     <li><a href="index.html">Home</a></li>
                     <li><a href="winter_schedule.html">Winter 2025 Schedule</a></li>
@@ -76,32 +73,7 @@ TEMPLATE.innerHTML = `
 class MyCoolHeader extends HTMLElement {
     connectedCallback() {
         const shadowRoot = attachShadow(this, TEMPLATE);
-        const menuButton = shadowRoot.querySelector('.menu-button');
-        const navLinks = shadowRoot.querySelector('nav ul');
 
-        // Toggle the visibility of the nav links
-        menuButton.addEventListener('click', () => {
-            console.log('Menu button clicked'); // Debugging statement
-            const isVisible = navLinks.style.display === 'flex';
-            navLinks.style.display = isVisible ? 'none' : 'flex';
-        });
-
-        // Close the menu when clicking outside the header
-        document.addEventListener('click', (event) => {
-            const isClickInside = this.contains(event.composedPath()[0]);
-            if (!isClickInside) {
-                navLinks.style.display = 'none';
-            }
-        });
-
-        // Reset nav links display on window resize
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 768) {
-                navLinks.style.display = 'flex';
-            } else {
-                navLinks.style.display = 'none';
-            }
-        });
     }
 }
 
