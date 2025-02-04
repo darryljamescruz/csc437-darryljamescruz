@@ -4,48 +4,7 @@
 body {
     font-family: var(--font-family-body);
     background-color: var(--color-background);
-}
-
-/* Header Styles */
-header {
-    background-color: var(--color-header-footer);
-    border-bottom: 2px solid var(--color-heading);
-}
-
-header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 1.5em;
-}
-
-header .container span {
-    font-size: 1.5rem;
-    font-weight: var(--font-weight-bold);
-    color: var(--color-heading);
-}
-
-header nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-header nav ul li {
-    margin-left: 1rem;
-}
-
-header nav ul li a {
-    text-decoration: none;
-    color: var(--color-heading);
-    font-weight: var(--font-weight-bold);
-}
-
-header nav ul li a.active {
-    color: var(--color-link-hover);
-    font-weight: bold;
-    text-decoration: underline;
+    color: var(--color-text);
 }
 
 /* Section Styles */
@@ -60,7 +19,6 @@ section {
     grid-template-columns: 0.5fr 1fr;
     gap: 1rem;
     padding: 1rem;
-    color: white;
 }
 
 #main h1 {

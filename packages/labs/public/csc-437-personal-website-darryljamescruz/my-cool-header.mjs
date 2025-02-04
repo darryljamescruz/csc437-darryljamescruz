@@ -5,11 +5,11 @@ TEMPLATE.innerHTML = `
     <style>
         header {
             font-family: var(--font-family-heading);
-            color: white;
             background-color: var(--color-header-footer);
             border-bottom: 2px solid var(--color-heading);
             padding: 1rem;
             font-size: 1.25em;
+            color: var(--color-main-heading);
         }
 
         .container {
@@ -81,9 +81,10 @@ TEMPLATE.innerHTML = `
             display: flex;
             align-items: center;
             margin-right: 1rem;
+            color: var(--color-text);
         }
 
-        .dark-mode-toggle {
+        .light-mode-toggle {
             margin-right: 0.5rem;
         }
     }
@@ -92,8 +93,14 @@ TEMPLATE.innerHTML = `
         <div class="container">
             <div class="header-row">    
                 <h1>Darryl James Cruz</h1>
-                <button class="menu-button">Menu</button>
+                <div style="display: flex; align-items: center;">
+                    <button class="menu-button">Menu</button>
+                </div>
             </div>
+            <label>
+                <input type="checkbox" class="light-mode-toggle" autocomplete="off">
+                Light mode
+            </label>
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
@@ -101,6 +108,7 @@ TEMPLATE.innerHTML = `
                     <li><a href="resume.html">Course Resume</a></li>
                 </ul>
             </nav>
+
         </div>
     </header>
 `;
@@ -110,6 +118,25 @@ class MyCoolHeader extends HTMLElement {
         const shadowRoot = attachShadow(this, TEMPLATE);
         const menuButton = shadowRoot.querySelector('.menu-button');
         const navLinks = shadowRoot.querySelector('nav ul');
+        const lightModeToggle = shadowRoot.querySelector('.light-mode-toggle');
+
+        // Initialize light mode from localStorage
+        const isLightMode = localStorage.getItem('lightMode') === 'true';
+        lightModeToggle.checked = isLightMode;
+        if (isLightMode) {
+            document.body.classList.add('light-mode');
+        }
+
+        // Handle light mode toggle
+        lightModeToggle.addEventListener('change', () => {
+            if (lightModeToggle.checked) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('lightMode', 'true');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('lightMode', 'false');
+            }
+        });
 
         // Toggle the visibility of the nav links
         menuButton.addEventListener('click', () => {
