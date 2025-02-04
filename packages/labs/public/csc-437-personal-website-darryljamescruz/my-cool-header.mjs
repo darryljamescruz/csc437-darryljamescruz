@@ -77,12 +77,20 @@ TEMPLATE.innerHTML = `
             border-style: none;
         }
 
+        label {
+            display: flex;
+            align-items: center;
+            margin-right: 1rem;
+        }
+
+        .dark-mode-toggle {
+            margin-right: 0.5rem;
+        }
     }
     </style>
     <header>
         <div class="container">
             <div class="header-row">    
-                <h1>Darryl James Cruz</h1>
                 <button class="menu-button">Menu</button>
             </div>
             <nav>
@@ -112,11 +120,10 @@ class MyCoolHeader extends HTMLElement {
         document.addEventListener('click', (event) => {
             const path = event.composedPath();
             const isClickInside = path.includes(this);
-            if (!isClickInside) {
+            if (!isClickInside && window.innerWidth <= 768) {
                 navLinks.style.display = 'none';
             }
         });
-
 
         // Reset nav links display on window resize
         window.addEventListener('resize', () => {
