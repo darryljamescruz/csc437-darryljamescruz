@@ -4,7 +4,6 @@
 body {
     font-family: var(--font-family-body);
     background-color: var(--color-background);
-    color: white;
 }
 
 /* Header Styles */
@@ -61,6 +60,7 @@ section {
     grid-template-columns: 0.5fr 1fr;
     gap: 1rem;
     padding: 1rem;
+    color: white;
 }
 
 #main h1 {

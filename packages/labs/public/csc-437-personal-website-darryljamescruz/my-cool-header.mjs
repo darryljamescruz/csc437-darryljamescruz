@@ -4,68 +4,87 @@ const TEMPLATE = document.createElement("template");
 TEMPLATE.innerHTML = `
     <style>
         header {
+            font-family: var(--font-family-heading);
+            color: white;
             background-color: var(--color-header-footer);
             border-bottom: 2px solid var(--color-heading);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 1rem;
             font-size: 1.25em;
         }
+
         .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
         }
-        nav {
+
+        .header-row {
             display: flex;
+            justify-content: space-between;
             align-items: center;
         }
+
         nav ul {
             display: flex;
             list-style: none;
             margin: 0;
             padding: 0;
+            flex-grow: 1;
         }
+
+        nav ul li {
+            margin-right: 1rem;
+            padding: 0.5rem 0 0.5rem 1rem;
+            }
 
         nav ul li a {
             text-decoration: none;
-            color: var(--color-heading);
+            color: var(--color-link);
             font-weight: var(--font-weight-bold);
-        }
-        nav ul li a.active {
-            color: var(--color-link-hover);
-            font-weight: bold;
-            text-decoration: underline;
+            flex-grow: 1; /* Allow each link to grow and shrink */
+
         }
 
         .menu-button {
             display: none;
         }
             
-
         @media (max-width: 768px) {
         .container {
             flex-direction: column; /* Stack elements vertically */
             align-items: flex-start; /* Align items to the start */
         }
+
+        .header-row {
+            width: 100%;
+        }
         
         nav ul {
             flex-direction: column;
             display: none;  /* Hidden by default on mobile */
+            width: 100%;
         }
         
         .menu-button {
-            display: block;
+            font-family: var(--font-family-heading);
+            font-size: 1em;
+            display: initial; /* Show button on mobile */
+            cursor: pointer;
+            background-color: var(--color-link);
+            color: white;
+            border-radius: 8px;
+            border-style: none;
         }
-        
+
     }
     </style>
     <header>
         <div class="container">
-            <h1>Darryl James Cruz</h1>
-            <button class="menu-button">Menu</button>
+            <div class="header-row">    
+                <h1>Darryl James Cruz</h1>
+                <button class="menu-button">Menu</button>
+            </div>
             <nav>
                 <ul>
                     <li><a href="index.html">Home</a></li>
