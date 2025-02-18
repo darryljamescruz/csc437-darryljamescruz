@@ -1,50 +1,39 @@
-import { TrashIcon } from "@heroicons/react/24/solid"; // Importing the trash icon
+// src/App.jsx
+import { useState } from "react";
+import TodoItem from "./TodoItem";
+import AddTaskForm from "./AddTaskForm";
 
 function App() {
+  const [tasks, setTasks] = useState(["Eat", "Sleep", "Repeat"]);
+
+  const handleAddTask = () => {
+    // For now, this is just a placeholder.
+    // Later, you'll update the tasks state to add a new task.
+    console.log("Add task clicked!");
+  };
+
+  const handleDeleteTask = (taskToDelete) => {
+    // Placeholder for deleting a task.
+    // In a later lab, you'll update the tasks state to remove the task.
+    console.log("Delete", taskToDelete);
+  };
+
   return (
-      <main className="m-4"> {/* Tailwind: margin level 4 on all sides */}
-        <div className="flex items-center space-x-4"> {/* Unfortunately comments in JSX have to be done like this */}
-            <input placeholder="New task name" className ="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>             
-            <button className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                Add task
-            </button>
-        </div>
-
-    <section>
-      <h1 className="text-xl font-bold">To do</h1>
-      <ul>
-        <li className="flex items-center justify-between w-fit max-w-md p-2">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="w-5 h-5 accent-blue-600 rounded-md cursor-pointer" />
-            <span className="text-lg">Eat</span>
-          </label>
-          <button className="p-2 text-red-500 rounded hover:bg-red-100">
-            <TrashIcon className="w-5 h-5" />
-          </button>
-        </li>
-
-        <li className="flex items-center justify-between w-fit max-w-md p-2">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="w-5 h-5 accent-blue-600 rounded-md cursor-pointer" />
-            <span className="text-lg">Sleep</span>
-          </label>
-          <button className="p-2 text-red-500 rounded hover:bg-red-100">
-            <TrashIcon className="w-5 h-5" />
-          </button>
-        </li>
-
-        <li className="flex items-center justify-between w-fit max-w-md p-2">
-          <label className="flex items-center space-x-2">
-            <input type="checkbox" className="w-5 h-5 accent-blue-600 rounded-md cursor-pointer" />
-            <span className="text-lg">Repeat</span>
-          </label>
-          <button className="p-2 text-red-500 rounded hover:bg-red-100">
-            <TrashIcon className="w-5 h-5" />
-          </button>
-        </li>
-      </ul>
-    </section>
-      </main>
+    <main className="m-4">
+      <AddTaskForm onAdd={handleAddTask} />
+      <section>
+        <h1 className="text-xl font-bold mt-4">To do</h1>
+        <ul>
+          {tasks.map((task, index) => (
+            <TodoItem 
+              key={index} 
+              task={task} 
+              onDelete={() => handleDeleteTask(task)} 
+            />
+          ))}
+        </ul>
+      </section>
+    </main>
   );
 }
 
