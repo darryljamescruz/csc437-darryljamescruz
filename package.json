@@ -10,5 +10,8 @@
   "license": "ISC",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "nanoid": "^5.1.0"
+  }
 }

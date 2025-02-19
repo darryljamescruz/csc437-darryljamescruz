@@ -1,34 +1,56 @@
 // src/App.jsx
 import { useState } from "react";
+import { nanoid } from "nanoid";
 import TodoItem from "./TodoItem";
 import AddTaskForm from "./AddTaskForm";
 
 function App() {
-  const [tasks, setTasks] = useState(["Eat", "Sleep", "Repeat"]);
+  const [tasks, setTasks] = useState([
+    { id: nanoid(), name: "Eat", completed: false },
+    { id: nanoid(), name: "Sleep", completed: false },
+    { id: nanoid(), name: "Repeat", completed: false },
+  ]);
 
-  const handleAddTask = () => {
-    // For now, this is just a placeholder.
-    // Later, you'll update the tasks state to add a new task.
-    console.log("Add task clicked!");
+  // Function to handle adding a new task
+  const handleAddTask = (taskName) => {
+    if (!taskName.trim()) { // Check if the task name is empty
+      return;
+    }
+
+    const newTask = {
+      id: nanoid(),
+      name: taskName,
+      completed: false,
+    };
+
+    setTasks((prevTasks) => [...prevTasks, newTask]);  // Add the new task to the tasks array
   };
 
-  const handleDeleteTask = (taskToDelete) => {
-    // Placeholder for deleting a task.
-    // In a later lab, you'll update the tasks state to remove the task.
-    console.log("Delete", taskToDelete);
+  // Function to handle deleting a task
+  const handleDeleteTask = (taskId) => {
+    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));  // Remove the task with the given ID
+  };
+
+  const handleToggleTask = (taskId) => {
+    setTasks((prevTasks) =>
+    prevTasks.map((task) =>
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    )
+  );
   };
 
   return (
     <main className="m-4">
-      <AddTaskForm onAdd={handleAddTask} />
+      <AddTaskForm onNewTask={handleAddTask} />  
       <section>
         <h1 className="text-xl font-bold mt-4">To do</h1>
         <ul>
-          {tasks.map((task, index) => (
+          {tasks.map((task) => (
             <TodoItem 
-              key={index} 
+              key={task.id} 
               task={task} 
-              onDelete={() => handleDeleteTask(task)} 
+              onToggle={() => handleToggleTask(task.id)}
+              onDelete={() => handleDeleteTask(task.id)} 
             />
           ))}
         </ul>
