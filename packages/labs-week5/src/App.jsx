@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 import TodoItem from "./TodoItem";
 import AddTaskForm from "./AddTaskForm";
 import Modal from "./Modal"; 
+import GroceryPanel from "./GroceryPanel";
 
 
 function App() {
@@ -78,6 +79,10 @@ function App() {
             />
           ))}
         </ul>
+      </section>
+
+      <section className="mt-6">
+        <GroceryPanel onAddTask={handleAddTask} /> {/* Pass handleAddTask */}
       </section>
 
     </main>
