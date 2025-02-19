@@ -13,12 +13,13 @@ function Modal({ isOpen, onCloseRequested, headerLabel, children }) {
 
     return (
         <div
-            className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-30 backdrop-blur-md"
+            className="fixed inset-0 flex justify-center items-center bg-transparent backdrop-blur-lg"
             onClick={handleOverlayClick}
         >
             <div
                 ref={modalRef}
-                className="bg-white p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-lg"
+                className="p-6 rounded-lg shadow-lg w-[90%] sm:w-[60%] md:w-[40%] lg:w-[30%] max-w-lg 
+                bg-white bg-opacity-50 backdrop-blur-lg border border-gray-300"
             >
                 {/* Modal Header */}
                 <div className="flex justify-between items-center border-b pb-2">
