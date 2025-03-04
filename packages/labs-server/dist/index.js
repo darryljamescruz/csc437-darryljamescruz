@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("mongodb");
+const ImageProvider_1 = require("./ImageProvider");
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config(); // Read the .env file in the current working directory, and load values into process.env.
@@ -27,6 +28,18 @@ async function setUpServer() {
         app.use(express_1.default.static(staticDir));
         app.get("/hello", (req, res) => {
             res.send("Hello, World");
+        });
+        // Make a new route that fetches images
+        app.get("/api/images", async (req, res) => {
+            try {
+                const provider = new ImageProvider_1.ImageProvider(mongoClient);
+                const images = await provider.getAllImages();
+                res.json(images);
+            }
+            catch (error) {
+                console.error("Error fetching images:", error);
+                res.status(500).json({ error: "Failed to fetch images" });
+            }
         });
         // Catch-all route for SPA support
         app.get("*", (req, res) => {
