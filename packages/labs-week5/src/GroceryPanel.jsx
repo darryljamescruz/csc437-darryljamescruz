@@ -1,7 +1,5 @@
-import React from "react";
-import { useState } from "react";
-
-const MDN_URL = "https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json";
+import React, { useState, useEffect } from "react";
+import { useGroceryFetch } from "./useGroceryFetch";
 
 /**
  * Creates and returns a new promise that resolves after a specified number of milliseconds.
@@ -9,51 +7,19 @@ const MDN_URL = "https://mdn.github.io/learning-area/javascript/apis/fetching-da
  * @param {number} ms the number of milliseconds to delay
  * @returns {Promise<undefined>} a promise that resolves with the value of `undefined` after the specified delay
  */
-function delayMs(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 export function GroceryPanel({ onAddTask }){
-    const [groceryData, setGroceryData] = useState([]); // Store fetched groceries
-    const [isLoading, setIsLoading] = useState(false);  // Track loading state
-    const [error, setError] = useState(null);           // Store error messages
-
-    // function to fetch groecery data
-    async function fetchData(url) {
-        console.log("Fetching grocery data from", url);
-
-        setIsLoading(true); // Set loading state to true
-        setError(null);    // Reset error state
-        setGroceryData([]); // Reset grocery data
-
-        try {
-            await delayMs(2000); // Simulate a 2-second delay
-
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-
-            const data = await response.json();
-            setGroceryData(data); // Set fetched data
-        } catch (err) {
-            setError(err.message); // Set error message
-        } finally {
-            setIsLoading(false); // Stop Loading
-        }
-    }
+    // Track selected grocery source    
+    const [dropdown, setDropdown] = useState("MDN");    
+    // Use the custom hook to fetch data based on the current source.
+    const { groceryData, isLoading, error } = useGroceryFetch(dropdown); 
 
     // handle dropdown selection
     function handleDropdownChange(event) {
-        const selectedUrl = event.target.value;
-
-        if (selectedUrl === "") {
-            setGroceryData([]); // Reset grocery data if no URL is selected
-        } else {
-            fetchData(selectedUrl); // Fetch data from selected URL
-        }
+        const newDropdown = event.target.value;
+        setDropdown(newDropdown);
     }
-    
+
     // handle add todo button click
     function handleAddTodoClicked(item) {
         const todoName = `Buy ${item.name} (${item.price.toFixed(2)})`;
@@ -75,10 +41,13 @@ export function GroceryPanel({ onAddTask }){
                     onChange={handleDropdownChange}
                     disabled={isLoading}
                     className="border border-gray-300 p-2 rounded-md text-gray-700 disabled:opacity-50"
+                    value={dropdown} 
                 >
                     <option value="">(None selected)</option>
-                    <option value={MDN_URL}>MDN</option>
-                    <option value="invalid">Who knows?</option>
+                    <option value="MDN">MDN</option>
+                    <option value="Liquor store">Liquor store</option>
+                    <option value="Butcher">Butcher</option>
+                    <option value="whoknows">Who knows?</option>
                 </select>
 
                 {/* Show Spinner While Loading */}
