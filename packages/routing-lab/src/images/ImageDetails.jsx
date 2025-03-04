@@ -7,9 +7,9 @@ export function ImageDetails() {
     console.log("Current imageId:", imageId); // prints the image id from the URL
 
     return (
-        <MainLayout>
+        <div>
             <h2>Image Details</h2>
             <p>Displaying details for image: {imageId}</p>
-        </MainLayout>
+        </div>
     );
 }

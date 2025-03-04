@@ -1,10 +1,11 @@
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router";
+
 import { Homepage } from "./Homepage";
 import { AccountSettings } from "./AccountSettings";
 import { ImageGallery } from "./images/ImageGallery.jsx";
 import { ImageDetails } from "./images/ImageDetails.jsx";
-import { BrowserRouter, Routes, Route } from "react-router";
-import React, { useState } from "react";
-
+import { MainLayout } from "./MainLayout.jsx";
 
 function App() {
     // Set up state for the account name
@@ -14,10 +15,12 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<Homepage userName={userName}/>}/>
-                <Route path="/account" element={<AccountSettings userName={userName} setUserName={setUserName} /> } />
-                <Route path="/images" element={<ImageGallery/>} />
-                <Route path="/images/:imageId" element={<ImageDetails/>} />
+                <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Homepage userName={userName}/>}/>
+                    <Route path="account" element={<AccountSettings userName={userName} setUserName={setUserName} /> } />
+                    <Route path="images" element={<ImageGallery/>} />
+                    <Route path="images/:imageId" element={<ImageDetails/>} />
+                </Route>
             </Routes>
         </BrowserRouter>
     )

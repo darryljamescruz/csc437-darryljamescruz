@@ -14,12 +14,12 @@ export function ImageGallery() {
         </div>
     ));
     return (
-        <MainLayout>
+        <div>
             <h2>Image Gallery</h2>
             {isLoading && "Loading..."}
             <div className="ImageGallery">
                 {imageElements}
             </div>
-        </MainLayout>
+        </div>
     );
 }

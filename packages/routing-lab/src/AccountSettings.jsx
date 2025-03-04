@@ -7,9 +7,10 @@ export function AccountSettings({userName, setUserName}) {
         console.log("New username:", event.target.value);
         setUserName(event.target.value);
     };
+    //rendering page using DIV instead of MainLayout
 
     return (
-        <MainLayout>
+        <div>
             <h2>Account settings</h2>
             <label htmlFor="userName">User Name: </label>
             <input
@@ -19,6 +20,6 @@ export function AccountSettings({userName, setUserName}) {
                 onChange={handleInputChange}
             />
             <p><i>Changes are auto-saved.</i></p>
-        </MainLayout>
+        </div>
     );
 }

@@ -1,12 +1,13 @@
-import { Header } from "./Header.jsx";
+import React from "react";
+import { Header } from "./Header";
+import { Outlet } from "react-router"
 
-export function MainLayout(props) {
+export function MainLayout() {
+    console.log("MainLayout rendered");
     return (
         <div>
             <Header />
-            <div style={{padding: "0 2em"}}>
-                {props.children}
-            </div>
+            <Outlet/>
         </div>
     );
 }
