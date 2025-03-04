@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { groceryFetcher } from "./groceryFetcher"
+import { useGroceryFetch } from "./useGroceryFetch";
 
 /**
  * Creates and returns a new promise that resolves after a specified number of milliseconds.
@@ -9,53 +9,16 @@ import { groceryFetcher } from "./groceryFetcher"
  */
 
 export function GroceryPanel({ onAddTask }){
-    const [groceryData, setGroceryData] = useState([]); // Store fetched groceries
-    const [isLoading, setIsLoading] = useState(false);  // Track loading state
-    const [error, setError] = useState(null);           // Store error messages
-    const [dropdown, setDropdown] = useState("MDN");    // Track selected grocery source
+    // Track selected grocery source    
+    const [dropdown, setDropdown] = useState("MDN");    
+    // Use the custom hook to fetch data based on the current source.
+    const { groceryData, isLoading, error } = useGroceryFetch(dropdown); 
 
-     // handle dropdown selection
+    // handle dropdown selection
     function handleDropdownChange(event) {
         const newDropdown = event.target.value;
         setDropdown(newDropdown);
     }
-
-    // useEffect to fetch data every time 'dropdown' changes.
-    useEffect(() => {
-        let isStale = false; // flag for stale requests
-        
-        // function to fetch groecery data
-        async function fetchData(source) {
-            console.log("Fetching grocery data from", source);
-
-            // Clear previous state at the beginning of the request
-            setIsLoading(true); 
-            setError(null);    
-            setGroceryData([]);
-
-            try {
-                const data = await groceryFetcher.fetch(dropdown);
-                // only update state if request is still valid
-                if (!isStale) {
-                    setGroceryData(data); 
-                }
-            } catch (err) {
-                if (!isStale) {
-                setError(err.message); // Set error message
-                }
-            } finally {
-                if (!isStale) {
-                    setIsLoading(false); // Stop loading
-                }
-            }
-    }
-    fetchData();
-
-    // cleanup func to mark request as stale
-    return () => {
-        isStale = true;
-    };
-    }, [dropdown])
 
     // handle add todo button click
     function handleAddTodoClicked(item) {
