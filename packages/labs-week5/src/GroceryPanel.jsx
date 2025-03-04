@@ -1,8 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { groceryFetcher } from "./groceryFetcher"
-
-const MDN_URL = "https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json";
 
 /**
  * Creates and returns a new promise that resolves after a specified number of milliseconds.
@@ -39,15 +36,15 @@ export function GroceryPanel({ onAddTask }){
         }
     }
 
+    // useEffect to fetch data on component mount
+    useEffect(() => {
+        fetchData(dropdown);
+    }, []) // empty dependency array means this will run once on mount
+
     // handle dropdown selection
     function handleDropdownChange(event) {
         const newDropdown = event.target.value;
         setDropdown(newDropdown);
-        if (newDropdown === "") {
-            setGroceryData([]); // Reset grocery data if no URL is selected
-        } else {
-            fetchData(newDropdown); // Fetch data from selected source
-        }
     }
     
     // handle add todo button click
