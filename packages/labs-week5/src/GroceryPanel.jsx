@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { groceryFetcher } from "./groceryFetcher"
 
 const MDN_URL = "https://mdn.github.io/learning-area/javascript/apis/fetching-data/can-store/products.json";
 
@@ -17,40 +18,35 @@ export function GroceryPanel({ onAddTask }){
     const [groceryData, setGroceryData] = useState([]); // Store fetched groceries
     const [isLoading, setIsLoading] = useState(false);  // Track loading state
     const [error, setError] = useState(null);           // Store error messages
+    const [dropdown, setDropdown] = useState("MDN");    // Track selected grocery source
+
 
     // function to fetch groecery data
-    async function fetchData(url) {
-        console.log("Fetching grocery data from", url);
+    async function fetchData(source) {
+        console.log("Fetching grocery data from", source);
 
         setIsLoading(true); // Set loading state to true
         setError(null);    // Reset error state
         setGroceryData([]); // Reset grocery data
 
         try {
-            await delayMs(2000); // Simulate a 2-second delay
-
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error("Failed to fetch data");
-            }
-
-            const data = await response.json();
-            setGroceryData(data); // Set fetched data
+            const data = await groceryFetcher.fetch(source);
+            setGroceryData(data); // Set fetched data directly
         } catch (err) {
             setError(err.message); // Set error message
         } finally {
-            setIsLoading(false); // Stop Loading
+            setIsLoading(false); // Stop loading
         }
     }
 
     // handle dropdown selection
     function handleDropdownChange(event) {
-        const selectedUrl = event.target.value;
-
-        if (selectedUrl === "") {
+        const newDropdown = event.target.value;
+        setDropdown(newDropdown);
+        if (newDropdown === "") {
             setGroceryData([]); // Reset grocery data if no URL is selected
         } else {
-            fetchData(selectedUrl); // Fetch data from selected URL
+            fetchData(newDropdown); // Fetch data from selected source
         }
     }
     
@@ -75,10 +71,13 @@ export function GroceryPanel({ onAddTask }){
                     onChange={handleDropdownChange}
                     disabled={isLoading}
                     className="border border-gray-300 p-2 rounded-md text-gray-700 disabled:opacity-50"
+                    value={dropdown} 
                 >
                     <option value="">(None selected)</option>
-                    <option value={MDN_URL}>MDN</option>
-                    <option value="invalid">Who knows?</option>
+                    <option value="MDN">MDN</option>
+                    <option value="Liquor store">Liquor store</option>
+                    <option value="Butcher">Butcher</option>
+                    <option value="whoknows">Who knows?</option>
                 </select>
 
                 {/* Show Spinner While Loading */}
