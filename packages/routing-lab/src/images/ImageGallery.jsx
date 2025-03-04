@@ -1,5 +1,6 @@
 import { MainLayout } from "../MainLayout.jsx";
 import { useImageFetching } from "./useImageFetching.js";
+import { Link } from "react-router";
 import "./ImageGallery.css";
 
 export function ImageGallery() {
@@ -7,9 +8,9 @@ export function ImageGallery() {
 
     const imageElements = fetchedImages.map((image) => (
         <div key={image.id} className="ImageGallery-photo-container">
-            <a href={"/images/" + image.id}>
+            <Link to={'/images/' + image.id}>
                 <img src={image.src} alt={image.name}/>
-            </a>
+            </Link>
         </div>
     ));
     return (
