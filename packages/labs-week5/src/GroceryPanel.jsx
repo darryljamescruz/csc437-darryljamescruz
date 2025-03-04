@@ -7,9 +7,6 @@ import { groceryFetcher } from "./groceryFetcher"
  * @param {number} ms the number of milliseconds to delay
  * @returns {Promise<undefined>} a promise that resolves with the value of `undefined` after the specified delay
  */
-function delayMs(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 export function GroceryPanel({ onAddTask }){
     const [groceryData, setGroceryData] = useState([]); // Store fetched groceries
@@ -17,36 +14,49 @@ export function GroceryPanel({ onAddTask }){
     const [error, setError] = useState(null);           // Store error messages
     const [dropdown, setDropdown] = useState("MDN");    // Track selected grocery source
 
-
-    // function to fetch groecery data
-    async function fetchData(source) {
-        console.log("Fetching grocery data from", source);
-
-        setIsLoading(true); // Set loading state to true
-        setError(null);    // Reset error state
-        setGroceryData([]); // Reset grocery data
-
-        try {
-            const data = await groceryFetcher.fetch(source);
-            setGroceryData(data); // Set fetched data directly
-        } catch (err) {
-            setError(err.message); // Set error message
-        } finally {
-            setIsLoading(false); // Stop loading
-        }
-    }
-
-    // useEffect to fetch data on component mount
-    useEffect(() => {
-        fetchData(dropdown);
-    }, []) // empty dependency array means this will run once on mount
-
-    // handle dropdown selection
+     // handle dropdown selection
     function handleDropdownChange(event) {
         const newDropdown = event.target.value;
         setDropdown(newDropdown);
     }
-    
+
+    // useEffect to fetch data every time 'dropdown' changes.
+    useEffect(() => {
+        let isStale = false; // flag for stale requests
+        
+        // function to fetch groecery data
+        async function fetchData(source) {
+            console.log("Fetching grocery data from", source);
+
+            // Clear previous state at the beginning of the request
+            setIsLoading(true); 
+            setError(null);    
+            setGroceryData([]);
+
+            try {
+                const data = await groceryFetcher.fetch(dropdown);
+                // only update state if request is still valid
+                if (!isStale) {
+                    setGroceryData(data); 
+                }
+            } catch (err) {
+                if (!isStale) {
+                setError(err.message); // Set error message
+                }
+            } finally {
+                if (!isStale) {
+                    setIsLoading(false); // Stop loading
+                }
+            }
+    }
+    fetchData();
+
+    // cleanup func to mark request as stale
+    return () => {
+        isStale = true;
+    };
+    }, [dropdown])
+
     // handle add todo button click
     function handleAddTodoClicked(item) {
         const todoName = `Buy ${item.name} (${item.price.toFixed(2)})`;
