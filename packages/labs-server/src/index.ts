@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { MongoClient } from "mongodb";
-import { ImageProvider } from "./ImageProvider";
 import { registerImageRoutes } from "./routes/images";
+import { registerAuthRoutes } from "./routes/auth";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -38,6 +38,9 @@ async function setUpServer() {
 
         // LAB 21: call register image routes from images.ts
         registerImageRoutes(app, mongoClient);
+
+        // LAB 22: call register auth routes from auth.ts
+        registerAuthRoutes(app, mongoClient);
 
         // Catch-all route for SPA support
         app.get("*", (req: Request, res: Response) => {

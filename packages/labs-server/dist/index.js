@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("mongodb");
 const images_1 = require("./routes/images");
+const auth_1 = require("./routes/auth");
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config(); // Read the .env file in the current working directory, and load values into process.env.
@@ -32,6 +33,8 @@ async function setUpServer() {
         });
         // LAB 21: call register image routes from images.ts
         (0, images_1.registerImageRoutes)(app, mongoClient);
+        // LAB 22: call register auth routes from auth.ts
+        (0, auth_1.registerAuthRoutes)(app, mongoClient);
         // Catch-all route for SPA support
         app.get("*", (req, res) => {
             res.sendFile(path_1.default.resolve(staticDir, "index.html"));
