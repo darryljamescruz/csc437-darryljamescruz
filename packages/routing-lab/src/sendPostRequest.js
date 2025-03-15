@@ -8,24 +8,23 @@ export async function sendPostRequest(url, payload) {
             body: JSON.stringify(payload),
         });
         console.log('Response status:', response.status);
-        // Optionally log response body if needed:
         const responseText = await response.text();
         console.log('Response text:', responseText);
 
         if (!response.ok) {
-           let errorMessage = 'Request Failed';
-            // Try to parse the response text as JSON
-            // and extract the error message if available
-           try {
+            let errorMessage = 'Request Failed';
+            try {
                 const errorData = JSON.parse(responseText);
                 errorMessage = errorData.message || errorMessage;
-           } catch (e) {
+            } catch (e) {
                 console.error('Error parsing error response:', e);
-           }
-           throw new Error(errorMessage);
+            }
+            throw new Error(errorMessage);
         }
         if (!responseText) {
-            return '';  // return empty string on success
+            return '';  // return empty string on success when no content
+        } else {
+            return JSON.parse(responseText);
         }
     } catch (error) {
         console.error('Error in sendPostRequest:', error);
