@@ -35,8 +35,15 @@ class CredentialsProvider {
         return true;
     }
     async verifyPassword(username, plaintextPassword) {
-        // TODO
-        return false;
+        // find user in the database
+        const user = await this.collection.findOne({ username });
+        if (!user) {
+            // user not found
+            return false;
+        }
+        // returns true if password matches, false otherwise
+        return await bcrypt_1.default.compare(plaintextPassword, user.password);
     }
 }
 exports.CredentialsProvider = CredentialsProvider;
+;

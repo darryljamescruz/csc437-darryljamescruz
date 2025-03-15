@@ -6,3 +6,69 @@ Content-Type: application/json
 
 ### A second example, each request should be delimited by a triple hash
 GET http://localhost:3000/api/images
+
+### Send a POST request to /auth/register with a JSON body
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{ "username": "newuser", "password": "password" }
+
+### 1. /auth/register with invalid payload (missing password)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "username": "user1"
+}
+
+### 2. /auth/register with a valid registration
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password"
+}
+
+### 3. /auth/register with duplicate username (should fail)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password"
+}
+
+### 4. /auth/login with invalid payload (missing password)
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "user1"
+}
+
+### 5. /auth/login with incorrect credentials
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "wrongpassword"
+}
+
+### 6. /auth/login with valid credentials (should return JWT token)
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "password"
+}
+
+### 7. /api/images with valid authentication
+# (Replace <YOUR_TOKEN> with the token received from a successful /auth/login)
+GET http://localhost:3000/api/images
+Authorization: Bearer <YOUR_TOKEN>
+
+### 8. /api/images without authentication (should return 401 Unauthorized)
+GET http://localhost:3000/api/images
