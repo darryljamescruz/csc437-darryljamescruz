@@ -1,13 +1,18 @@
 import React from 'react';
 import UsernamePasswordForm from './UsernamePasswordForm';
+import { sendPostRequest } from '../sendPostRequest'
 
 export default function RegisterPage() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    // handle form submission using async function 
+    const handleSubmit = async ({ username, password}) => {
+        console.log('Register Form submitted with username:', username);
 
-        // Handle form submission logic here
-        // logging form submission to console for now
-        console.log('Form submitted');
+        // send a POST request to the server to register the user
+        const result = await sendPostRequest('/auth/register', { username, password });
+        if (result) {
+            return result;
+        }
+        console.log("Registration successful");    
     };
 
     return (

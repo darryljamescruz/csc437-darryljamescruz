@@ -7,6 +7,10 @@ export async function sendPostRequest(url, payload) {
             }, 
             body: JSON.stringify(payload),
         });
+        console.log('Response status:', response.status);
+        // Optionally log response body if needed:
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.message || 'Request failed');
