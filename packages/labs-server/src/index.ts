@@ -30,6 +30,7 @@ async function setUpServer() {
         const staticDir = process.env.STATIC_DIR || "public";
 
         app.use(express.static(staticDir));
+        app.use(express.json());
 
         app.get("/hello", (req: Request, res: Response) => {
             res.send("Hello, World");

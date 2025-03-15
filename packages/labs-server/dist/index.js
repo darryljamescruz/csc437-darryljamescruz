@@ -26,6 +26,7 @@ async function setUpServer() {
         const app = (0, express_1.default)();
         const staticDir = process.env.STATIC_DIR || "public";
         app.use(express_1.default.static(staticDir));
+        app.use(express_1.default.json());
         app.get("/hello", (req, res) => {
             res.send("Hello, World");
         });

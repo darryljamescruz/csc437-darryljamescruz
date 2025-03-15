@@ -23,4 +23,15 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
             res.status(500).json({ error: "Failed to fetch images" });
         }
     });
+    // update API 
+    app.patch("/api/images/:id", async (req: Request, res: Response) => {
+        // exctact image id from route params
+        const imageId = req.params.id;
+        // extract the image data from the request body
+        const { name } = req.body;
+
+        // log the imageId and name
+        console.log(`Updating image ID ${imageId} to new name: ${name}`);
+        res.send("OK");
+    });
 }
