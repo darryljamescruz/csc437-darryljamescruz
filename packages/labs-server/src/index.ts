@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { MongoClient } from "mongodb";
 import { ImageProvider } from "./ImageProvider";
+import { registerImageRoutes } from "./routes/images";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -29,22 +30,14 @@ async function setUpServer() {
         const staticDir = process.env.STATIC_DIR || "public";
 
         app.use(express.static(staticDir));
+        app.use(express.json());
 
         app.get("/hello", (req: Request, res: Response) => {
             res.send("Hello, World");
         });
 
-        // Make a new route that fetches images
-        app.get("/api/images", async (req: Request, res: Response) => {
-            try {
-                const provider = new ImageProvider(mongoClient);
-                const images = await provider.getAllImages();
-                res.json(images);
-            } catch (error) {
-                console.error("Error fetching images:", error);
-                res.status(500).json({ error: "Failed to fetch images" });
-            }
-        });
+        // LAB 21: call register image routes from images.ts
+        registerImageRoutes(app, mongoClient);
 
         // Catch-all route for SPA support
         app.get("*", (req: Request, res: Response) => {

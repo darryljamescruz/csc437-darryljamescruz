@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("mongodb");
-const ImageProvider_1 = require("./ImageProvider");
+const images_1 = require("./routes/images");
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 dotenv_1.default.config(); // Read the .env file in the current working directory, and load values into process.env.
@@ -26,21 +26,12 @@ async function setUpServer() {
         const app = (0, express_1.default)();
         const staticDir = process.env.STATIC_DIR || "public";
         app.use(express_1.default.static(staticDir));
+        app.use(express_1.default.json());
         app.get("/hello", (req, res) => {
             res.send("Hello, World");
         });
-        // Make a new route that fetches images
-        app.get("/api/images", async (req, res) => {
-            try {
-                const provider = new ImageProvider_1.ImageProvider(mongoClient);
-                const images = await provider.getAllImages();
-                res.json(images);
-            }
-            catch (error) {
-                console.error("Error fetching images:", error);
-                res.status(500).json({ error: "Failed to fetch images" });
-            }
-        });
+        // LAB 21: call register image routes from images.ts
+        (0, images_1.registerImageRoutes)(app, mongoClient);
         // Catch-all route for SPA support
         app.get("*", (req, res) => {
             res.sendFile(path_1.default.resolve(staticDir, "index.html"));
