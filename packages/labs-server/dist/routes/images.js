@@ -30,17 +30,32 @@ function registerImageRoutes(app, mongoClient) {
         const imageId = req.params.id;
         // extract the image data from the request body
         const { name } = req.body;
+        // send a 400 error if name is not provided
+        if (!name) {
+            res.status(400).send({
+                error: "Bad request",
+                message: "Missing name property. Try again."
+            });
+            return;
+        }
         try {
             const provider = new ImageProvider_1.ImageProvider(mongoClient);
-            // update the image name
-            await provider.updateImageName(imageId, name);
+            const matchedCount = await provider.updateImageName(imageId, name);
+            // log the imageId and name
+            console.log(`Updating image ID ${imageId} to new name: ${name}`);
+            // send a 404 error if no image was found
+            if (matchedCount === 0) {
+                res.status(404).send({
+                    error: "Not found",
+                    message: "No image found with the provided ID. Try again."
+                });
+                return;
+            }
         }
         catch (error) {
             console.error("Error updating image name:", error);
             res.status(500).json({ error: "Failed to update image name" });
         }
-        // log the imageId and name
-        console.log(`Updating image ID ${imageId} to new name: ${name}`);
-        res.send("OK");
+        res.status(204).send("Image name updated successfully");
     });
 }
