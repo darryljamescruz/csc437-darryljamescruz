@@ -14,7 +14,7 @@ export function registerAuthRoutes(app: express.Application, mongoClient: MongoC
         if (!username || !password) {
             res.status(400).send({
                 error: "Bad request",
-                message: "Missing username or password"
+                message: "Missing username or password. Try again."
             });
             return;
         }
@@ -28,7 +28,7 @@ export function registerAuthRoutes(app: express.Application, mongoClient: MongoC
         if (!registrationSuccess) {
             res.status(400).send({
                 error: "Bad request",
-                message: "Usenamer already exists"
+                message: "Usename already taken. Try again."
             });
             return;
         }
