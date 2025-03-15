@@ -77,8 +77,16 @@ export function registerAuthRoutes(app: express.Application, mongoClient: MongoC
             });
             return;
         }
-        //send a 201 response if registration was successful
-        res.status(201).send();
+        // if registration was successful, generate a token and return it, along with a 201 status code
+        try {
+            const token = await generateAuthToken(username);
+            res.status(201).json({ token });
+        } catch (error) {
+            res.status(500).send({
+                error: "Internal server error",
+                message: "Failed to generate auth token. Try again."
+            });
+        }
         return;
     });
 

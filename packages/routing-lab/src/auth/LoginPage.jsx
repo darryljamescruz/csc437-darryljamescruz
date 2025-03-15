@@ -1,9 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import UsernamePasswordForm from './UsernamePasswordForm';
 import { sendPostRequest } from '../sendPostRequest';
 
 export default function LoginPage() {
+  const Navigate = useNavigate(); // useNavigate hook
+
+  // handle form submission using async function
   const handleSubmit = async ({ username, password }) => {
     console.log("Logging in with username:", username);
     const result = await sendPostRequest('/auth/login', { username, password });
@@ -12,8 +15,9 @@ export default function LoginPage() {
     if (typeof result === 'string' && result !== '') {
       return result;
     } else if (result.token) {
-      // Handle successful login, e.g., store token, redirect, etc.
+      // handle successful login
       console.log('Login successful:', result.token);
+      Navigate('/')
       return '';
     } else {
       return 'Unexpected error occured';
