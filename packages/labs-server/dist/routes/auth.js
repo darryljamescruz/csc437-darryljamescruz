@@ -47,8 +47,8 @@ function registerAuthRoutes(app, mongoClient) {
     //handle post requests to /auth/register
     app.post("/auth/register", async (req, res) => {
         const { username, password } = req.body;
-        console.log("Registering user: ", username);
-        console.log("password: ", password);
+        //console.log("Registering user: ", username);
+        //console.log("password: ", password);
         //check if username and password are provided
         if (!username || !password) {
             res.status(400).send({
