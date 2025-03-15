@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import UsernamePasswordForm from './UsernamePasswordForm';
 import { sendPostRequest } from '../sendPostRequest'
 
 export default function RegisterPage() {
+    const Navigate = useNavigate();
+    
     // handle form submission using async function 
     const handleSubmit = async ({ username, password}) => {
         console.log('Register Form submitted with username:', username);
@@ -12,7 +15,9 @@ export default function RegisterPage() {
         if (result) {
             return result;
         }
-        console.log("Registration successful");    
+        console.log("Registration successful. Navigating to Login Page.");    
+        Navigate('/login');
+        return '';
     };
 
     return (
