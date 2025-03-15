@@ -1,4 +1,4 @@
-import { MongoClient, ObjectId} from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 
 // define an interface matching the MongoDB document structure
 interface ImageDocument {
@@ -49,5 +49,19 @@ export class ImageProvider {
         }
 
         return images;
+    }
+
+    async updateImageName(imageId: string, name: string): Promise<number> {
+        // Convert imageId to ObjectId
+        const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
+        
+        // Check if the collection name is defined
+        if (!imagesCollectionName) {
+            throw new Error("Missing collection name in environment variables");
+        }
+        
+        const imagesCollection = this.mongoClient.db().collection<ImageDocument>(imagesCollectionName);
+        const result = await imagesCollection.updateOne({ _id: imageId }, { $set: { name: name }});
+        return result.matchedCount;
     }
 }

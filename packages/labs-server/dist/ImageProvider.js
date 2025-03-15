@@ -33,5 +33,16 @@ class ImageProvider {
         }
         return images;
     }
+    async updateImageName(imageId, name) {
+        // Convert imageId to ObjectId
+        const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
+        // Check if the collection name is defined
+        if (!imagesCollectionName) {
+            throw new Error("Missing collection name in environment variables");
+        }
+        const imagesCollection = this.mongoClient.db().collection(imagesCollectionName);
+        const result = await imagesCollection.updateOne({ _id: imageId }, { $set: { name: name } });
+        return result.matchedCount;
+    }
 }
 exports.ImageProvider = ImageProvider;

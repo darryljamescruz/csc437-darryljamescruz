@@ -29,6 +29,14 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
         const imageId = req.params.id;
         // extract the image data from the request body
         const { name } = req.body;
+        try {
+            const provider = new ImageProvider(mongoClient);
+            // update the image name
+            await provider.updateImageName(imageId, name);
+        } catch (error) {
+            console.error("Error updating image name:", error);
+            res.status(500).json({ error: "Failed to update image name" });
+        }
 
         // log the imageId and name
         console.log(`Updating image ID ${imageId} to new name: ${name}`);
