@@ -19,7 +19,7 @@ interface UserDocument {
 export class ImageProvider {
     constructor(private readonly mongoClient: MongoClient) {}
 
-    async getAllImages(): Promise<ImageDocument[]> {
+    async getAllImages(authorId?: string): Promise<ImageDocument[]> {
         const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
         const usersCollectionName = process.env.USERS_COLLECTION_NAME;
 
@@ -30,8 +30,9 @@ export class ImageProvider {
         const imagesCollection = this.mongoClient.db().collection<ImageDocument>(imagesCollectionName);
         const usersCollection = this.mongoClient.db().collection<UserDocument>(usersCollectionName);
 
-        // Fetch all images
-        const images = await imagesCollection.find().toArray();
+        // fetch images based on authorId
+        const filterImage = authorId ? { author: authorId } : {};
+        const images = await imagesCollection.find(filterImage).toArray();
 
         // Replace author ID with actual user object
         for (const image of images) {

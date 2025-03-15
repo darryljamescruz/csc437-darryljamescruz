@@ -6,7 +6,7 @@ class ImageProvider {
     constructor(mongoClient) {
         this.mongoClient = mongoClient;
     }
-    async getAllImages() {
+    async getAllImages(authorId) {
         const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
         const usersCollectionName = process.env.USERS_COLLECTION_NAME;
         if (!imagesCollectionName || !usersCollectionName) {
@@ -14,8 +14,9 @@ class ImageProvider {
         }
         const imagesCollection = this.mongoClient.db().collection(imagesCollectionName);
         const usersCollection = this.mongoClient.db().collection(usersCollectionName);
-        // Fetch all images
-        const images = await imagesCollection.find().toArray();
+        // fetch images based on authorId
+        const filterImage = authorId ? { author: authorId } : {};
+        const images = await imagesCollection.find(filterImage).toArray();
         // Replace author ID with actual user object
         for (const image of images) {
             if (typeof image.author === "string") {

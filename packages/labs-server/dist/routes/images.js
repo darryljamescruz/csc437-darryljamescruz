@@ -3,11 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerImageRoutes = registerImageRoutes;
 const ImageProvider_1 = require("../ImageProvider");
 function registerImageRoutes(app, mongoClient) {
-    // Make a new route that fetches images
+    // make a new route that fetches images
     app.get("/api/images", async (req, res) => {
+        // get the userId from the query parameters
+        let userId = undefined;
+        if (typeof req.query.createdBy === "string") {
+            userId = req.query.createdBy;
+        }
+        console.log("Queried userID: ", userId);
         try {
+            // Use the ImageProvider to fetch images
             const provider = new ImageProvider_1.ImageProvider(mongoClient);
-            const images = await provider.getAllImages();
+            // Fetch images from the provider
+            const images = await provider.getAllImages(userId);
+            // Send the images as a response
             res.json(images);
         }
         catch (error) {
