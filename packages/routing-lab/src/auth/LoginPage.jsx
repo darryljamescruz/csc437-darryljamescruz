@@ -3,8 +3,8 @@ import { Link, useNavigate} from 'react-router-dom';
 import UsernamePasswordForm from './UsernamePasswordForm';
 import { sendPostRequest } from '../sendPostRequest';
 
-export default function LoginPage() {
-  const Navigate = useNavigate(); // useNavigate hook
+export default function LoginPage({setAuthToken}) {
+  const navigate = useNavigate(); // useNavigate hook
 
   // handle form submission using async function
   const handleSubmit = async ({ username, password }) => {
@@ -17,7 +17,8 @@ export default function LoginPage() {
     } else if (result.token) {
       // handle successful login
       console.log('Login successful:', result.token);
-      Navigate('/')
+      setAuthToken(result.token);
+      navigate('/')
       return '';
     } else {
       return 'Unexpected error occured';
