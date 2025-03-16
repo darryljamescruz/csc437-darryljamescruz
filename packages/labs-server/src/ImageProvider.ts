@@ -17,9 +17,10 @@ interface UserDocument {
 }
 
 interface NewImage {
-    url: string;
-    title: string;
+    src: string;
+    name: string;
     author: string;
+    likes: number;
 }
 
 

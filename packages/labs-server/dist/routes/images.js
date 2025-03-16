@@ -2,10 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerImageRoutes = registerImageRoutes;
 const ImageProvider_1 = require("../ImageProvider");
+const verifyAuthToken_1 = require("../verifyAuthToken");
 const imageUploadMiddleware_1 = require("../imageUploadMiddleware");
 function registerImageRoutes(app, mongoClient) {
     // make a new route that fetches images
-    app.get("/api/images", async (req, res) => {
+    app.get("/api/images", verifyAuthToken_1.verifyAuthToken, async (req, res) => {
         // get the userId from the query parameters
         let userId = undefined;
         if (typeof req.query.createdBy === "string") {
@@ -26,7 +27,7 @@ function registerImageRoutes(app, mongoClient) {
         }
     });
     // update API 
-    app.patch("/api/images/:id", async (req, res) => {
+    app.patch("/api/images/:id", verifyAuthToken_1.verifyAuthToken, async (req, res) => {
         // exctact image id from route params
         const imageId = req.params.id;
         // extract the image data from the request body
@@ -60,7 +61,7 @@ function registerImageRoutes(app, mongoClient) {
         res.status(204).send("Image name updated successfully");
     });
     //  post  /api/images
-    app.post("/api/images", imageUploadMiddleware_1.imageMiddlewareFactory.single("image"), imageUploadMiddleware_1.handleImageFileErrors, async (req, res) => {
+    app.post("/api/images", verifyAuthToken_1.verifyAuthToken, imageUploadMiddleware_1.imageMiddlewareFactory.single("image"), imageUploadMiddleware_1.handleImageFileErrors, async (req, res) => {
         console.log("Uploaded file:", req.file);
         console.log("Form data:", req.body);
         try {
@@ -71,19 +72,22 @@ function registerImageRoutes(app, mongoClient) {
             }
             const tokenData = res.locals.token;
             const author = tokenData ? tokenData.username : "unknown";
-            const imageUrl = `/uploads/${req.file.filename}`;
+            const imgSrc = `/uploads/${req.file.filename}`;
             const { title } = req.body;
             const provider = new ImageProvider_1.ImageProvider(mongoClient);
             const newImage = await provider.createImage({
-                url: imageUrl,
-                title: title,
+                src: imgSrc,
+                name: title,
+                likes: 0,
                 author: author,
             });
             res.status(201).json(newImage);
+            return;
         }
         catch (err) {
             console.log("Error uploading image:", err);
             res.status(500).json({ error: "Image upload failed " });
+            return;
         }
     });
 }

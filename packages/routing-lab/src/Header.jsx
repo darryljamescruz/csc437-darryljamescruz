@@ -2,7 +2,7 @@ import "./Header.css";
 import { Link } from "react-router";
 
 export function Header() {
-    console.log("Header rendered");
+    //console.log("Header rendered");
     return (
         <header>
             <h1>My cool site</h1>
