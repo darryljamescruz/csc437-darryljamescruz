@@ -11,10 +11,12 @@ import path from "path";
 
 const PORT = process.env.PORT || 3000;
 const staticDir = process.env.STATIC_DIR || "public";
+const IMAGE_UPLOAD_DIR = process.env.IMAGE_UPLOAD_DIR || "uploads";
 
 const { MONGO_USER, MONGO_PWD, MONGO_CLUSTER, DB_NAME } = process.env;
 const connectionStringRedacted = `mongodb+srv://${MONGO_USER}:<password>@${MONGO_CLUSTER}/${DB_NAME}`;
 const connectionString = `mongodb+srv://${MONGO_USER}:${MONGO_PWD}@${MONGO_CLUSTER}/${DB_NAME}`;
+
 
 console.log("Attempting Mongo connection at " + connectionStringRedacted);
 
@@ -30,6 +32,8 @@ async function setUpServer() {
         // Set up Express
         const app = express();
         const staticDir = process.env.STATIC_DIR || "public";
+        app.use("/uploads", express.static(path.join(__dirname, "..", IMAGE_UPLOAD_DIR)));
+        console.log("Uploads directory:", path.join(__dirname, "..", IMAGE_UPLOAD_DIR));
 
         app.use(express.static(staticDir));
         app.use(express.json());

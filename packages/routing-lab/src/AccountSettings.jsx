@@ -1,4 +1,3 @@
-import { MainLayout } from "./MainLayout.jsx";
 import React from "react";
 
 export function AccountSettings({userName, setUserName}) {

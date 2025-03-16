@@ -1,8 +1,9 @@
 import { Link } from "react-router";
+import { ImageUploadForm } from "./ImageUploadForm";
 import "./ImageGallery.css";
 
 // uses isLoading, fetchedImages props from App.jsx
-export function ImageGallery({ isLoading, fetchedImages }) {
+export function ImageGallery({ isLoading, fetchedImages, authToken }) {
     const imageElements = fetchedImages.map((image) => (
         <div key={image.id} className="ImageGallery-photo-container">
             <Link to={`${image.id}`}>               
@@ -17,6 +18,8 @@ export function ImageGallery({ isLoading, fetchedImages }) {
             <div className="ImageGallery">
                 {imageElements}
             </div>
+            <h3>Upload an Image</h3>
+            <ImageUploadForm authToken={authToken} />
         </div>
     );
 }

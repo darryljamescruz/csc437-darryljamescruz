@@ -1,10 +1,13 @@
 import express, { Request, Response } from "express";
 import { MongoClient } from "mongodb";
 import { ImageProvider } from "../ImageProvider";
+import { verifyAuthToken } from "../verifyAuthToken";
+import { imageMiddlewareFactory, handleImageFileErrors } from "../imageUploadMiddleware";
+
 
 export function registerImageRoutes(app: express.Application, mongoClient: MongoClient) {
     // make a new route that fetches images
-    app.get("/api/images", async (req: Request, res: Response) => {
+    app.get("/api/images", verifyAuthToken, async (req: Request, res: Response) => {
         // get the userId from the query parameters
         let userId: string | undefined = undefined;
         if (typeof req.query.createdBy === "string") {
@@ -23,8 +26,9 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
             res.status(500).json({ error: "Failed to fetch images" });
         }
     });
+
     // update API 
-    app.patch("/api/images/:id", async (req: Request, res: Response) => {
+    app.patch("/api/images/:id", verifyAuthToken, async (req: Request, res: Response) => {
         // exctact image id from route params
         const imageId = req.params.id;
         // extract the image data from the request body
@@ -59,7 +63,42 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
             console.error("Error updating image name:", error);
             res.status(500).json({ error: "Failed to update image name" });
         }
-
         res.status(204).send("Image name updated successfully");
     });
+
+    //  post  /api/images
+    app.post(
+        "/api/images",
+        verifyAuthToken,
+        imageMiddlewareFactory.single("image"),
+        handleImageFileErrors,
+        async (req: Request, res: Response): Promise<void> => {
+            console.log("Uploaded file:", req.file);
+            console.log("Form data:", req.body);
+            try {
+                // file should be available in req.file after middleware has processed it
+                if (!req.file || !req.body.title) {
+                    res.status(400).json({ error: "Missle file or image title"});
+                    return;
+                } 
+                const tokenData = res.locals.token;
+                const author = tokenData ? tokenData.username : "unknown";
+                const imgSrc = `/uploads/${req.file.filename}`;
+                const { title } = req.body;
+
+                const provider = new ImageProvider(mongoClient);
+                const newImage = await provider.createImage({
+                    src: imgSrc,
+                    name: title,
+                    likes:0,
+                    author: author,
+                });
+                res.status(201).json(newImage);
+                return;
+            } catch (err) {
+                console.log("Error uploading image:", err);
+                res.status(500).json({ error: "Image upload failed "});
+                return;
+            }
+         });   
 }

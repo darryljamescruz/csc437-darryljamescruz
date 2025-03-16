@@ -3,7 +3,7 @@ import { Header } from "./Header";
 import { Outlet } from "react-router"
 
 export function MainLayout() {
-    console.log("MainLayout rendered");
+    //console.log("MainLayout rendered");
     return (
         <div>
             <Header />
