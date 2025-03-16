@@ -75,15 +75,17 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
             console.log("Form data:", req.body);
             try {
                 // file should be available in req.file after middleware has processed it
-                if (!req.file) {
-                    res.status(400).json({ error: "No image file provided"});
+                if (!req.file || !req.body.title) {
+                    res.status(400).json({ error: "Missle file or image title"});
                     return;
                 } 
-                const { title } = req.body;
+                const tokenData = res.locals.token;
+                const author = tokenData ? tokenData.username : "unknown";
                 const imageUrl = `/uploads/${req.file.filename}`;
-                const author = req.body.author ||  "unknown";
+                const { title } = req.body;
+
                 const provider = new ImageProvider(mongoClient);
-                const newImage = await provider.insertImage({
+                const newImage = await provider.createImage({
                     url: imageUrl,
                     title: title,
                     author: author,

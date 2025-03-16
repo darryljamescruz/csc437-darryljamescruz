@@ -47,7 +47,7 @@ class ImageProvider {
         const result = await imagesCollection.updateOne({ _id: imageId }, { $set: { name: name } });
         return result.matchedCount;
     }
-    async insertImage(newImage) {
+    async createImage(newImage) {
         const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
         if (!imagesCollectionName) {
             throw new Error("Missing collection name in environment variables");

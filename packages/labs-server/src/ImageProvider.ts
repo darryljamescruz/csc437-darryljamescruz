@@ -74,17 +74,19 @@ export class ImageProvider {
         return result.matchedCount;
     }
 
-    async insertImage(newImage: NewImage): Promise<any> {
+
+    
+    async createImage(newImage: NewImage): Promise<any> {
         const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
         if (!imagesCollectionName) {
-            throw new Error("Missing collection name in environment variables");
+          throw new Error("Missing collection name in environment variables");
         }
         const imagesCollection = this.mongoClient.db().collection(imagesCollectionName);
         const result = await imagesCollection.insertOne(newImage);
         return {
-            ...newImage,
-            id: result.insertedId.toString()
+          ...newImage,
+          id: result.insertedId.toString()
         };
-    }
+      }
 
 }
