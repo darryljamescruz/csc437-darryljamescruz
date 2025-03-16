@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { ImageUploadForm } from "./ImageUploadForm";
 import "./ImageGallery.css";
 
 // uses isLoading, fetchedImages props from App.jsx
@@ -17,6 +18,8 @@ export function ImageGallery({ isLoading, fetchedImages }) {
             <div className="ImageGallery">
                 {imageElements}
             </div>
+            <h3>Upload an Image</h3>
+            <ImageUploadForm />
         </div>
     );
 }
