@@ -38,7 +38,7 @@ export class ImageProvider {
         for (const image of images) {
             if (typeof image.author === "string") {
                 try {
-                    const user = await usersCollection.findOne({ _id: image.author }); // No ObjectId conversion                    
+                    const user = await usersCollection.findOne({ _id: image.author });                    
                     if (user) {
                         image.author = user; // Replace ID with full user object
                     }
@@ -48,14 +48,16 @@ export class ImageProvider {
             }
         }
 
-        return images;
+        // Map each image to include an `id` property (converted from _id)
+        return images.map((image) => ({
+            ...image,
+            id: image._id.toString()
+        }));
     }
 
     async updateImageName(imageId: string, name: string): Promise<number> {
-        // Convert imageId to ObjectId
-        const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
-        
         // Check if the collection name is defined
+        const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
         if (!imagesCollectionName) {
             throw new Error("Missing collection name in environment variables");
         }
