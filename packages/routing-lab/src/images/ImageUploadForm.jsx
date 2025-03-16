@@ -1,8 +1,9 @@
 import React, { useState, useId } from "react";
+import { sendFileUploadRequest } from "../sendFileUploadRequest";
 
-export function ImageUploadForm() {
+export function ImageUploadForm({authToken}) {
     const fileinputId = useId();    // useID hook to generate unique ID for file input
-    const [previewURL, setPreviewURL] = useState("");   // useState hook to manage preview URL
+    const [previewURL, setPreviewURL] = useState(null);   // useState hook to manage preview URL
 
     // function to read a file as a data URL
     function readAsDataURL(file) {
@@ -27,8 +28,27 @@ export function ImageUploadForm() {
         }
     }
 
+    async function handleSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target); // create FormData object from form
+        try {
+            const result = await sendFileUploadRequest("/api/images", formData, authToken);
+            if (typeof result === "string" && result !=="") {
+                console.error("Upload error:", result)
+            } else {
+                console.log("Upload successful:", result);
+                // clear form fields
+                e.target.reset();
+                setPreviewURL("");
+            }
+        } catch (err) {
+            console.error("Error uploading file", err);
+        }
+    }
+
+
     return (
-        <form>
+        <form onSubmit={handleSubmit}>
             <div>
                 <label htmlFor={fileinputId}>Choose image to upload: </label>
                 <input
@@ -47,10 +67,10 @@ export function ImageUploadForm() {
             </div>
 
             <div> {/* Preview img element */}
-                <img style={{maxWidth: "20em"}} src={"GIVE ME A DATA URL"} alt="" />
+                <img style={{maxWidth: "20em"}} src={previewURL} alt="Image Preview" />
             </div>
 
-            <button>Confirm upload</button>
+            <button type="submit">Confirm upload</button>
         </form>
     );
 }

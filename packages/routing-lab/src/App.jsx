@@ -41,7 +41,7 @@ function App() {
                     >
                     <Route index element={<Homepage userName={authToken && "User"}/>}/>
                     <Route path="account" element={<AccountSettings userName={authToken && "User"} setUserName={() => {}} /> } />
-                    <Route path="images" element={<ImageGallery isLoading={isLoading} fetchedImages={fetchedImages}/>} />
+                    <Route path="images" element={<ImageGallery isLoading={isLoading} fetchedImages={fetchedImages} authToken={authToken}/>} />
                     <Route path="images/:imageId" element={<ImageDetails/>} />
                 </Route>
             </Routes>
