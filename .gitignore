@@ -4,3 +4,4 @@ node_modules/
 packages/labs-server/.env
 packages/labs-server/.env
 packages/labs-server/.env
+packages/labs-server/uploads
