@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 const IMAGES = [
     {
         id: "0",
@@ -36,19 +35,34 @@ const IMAGES = [
  * @param delay {number} the number of milliseconds fetching will take
  * @returns {{isLoading: boolean, fetchedImages: ImageData[]}} fetch state and data
  */
-export function useImageFetching(imageId, delay=1000) {
+export function useImageFetching(authToken) {
     const [isLoading, setIsLoading] = useState(true);
     const [fetchedImages, setFetchedImages] = useState([]);
     useEffect(() => {
-        setTimeout(() => {
-            if (imageId === "") {
-                setFetchedImages(IMAGES);
-            } else {
-                setFetchedImages(IMAGES.filter((image) => image.id === imageId));
-            }
+        // If no auth token is provided, don't fetch images.
+        if (!authToken) {
+          setIsLoading(false);
+          return;
+        }
+    
+        const fetchImages = async () => {
+          try {
+            const response = await fetch("/api/images", {
+              headers: {
+                Authorization: `Bearer ${authToken}`
+              }
+            });
+            const data = await response.json();
+            setFetchedImages(data);
+          } catch (error) {
+            console.error("Error fetching images:", error);
+          } finally {
             setIsLoading(false);
-        }, delay);
-    }, [imageId]);
-
-    return { isLoading, fetchedImages };
+          }
+        };
+    
+        fetchImages();
+      }, [authToken]); // re-run when the auth token changes
+    
+      return { isLoading, fetchedImages };
 }
