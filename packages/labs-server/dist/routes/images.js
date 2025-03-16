@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerImageRoutes = registerImageRoutes;
 const ImageProvider_1 = require("../ImageProvider");
+const imageUploadMiddleware_1 = require("../imageUploadMiddleware");
 function registerImageRoutes(app, mongoClient) {
     // make a new route that fetches images
     app.get("/api/images", async (req, res) => {
@@ -57,5 +58,31 @@ function registerImageRoutes(app, mongoClient) {
             res.status(500).json({ error: "Failed to update image name" });
         }
         res.status(204).send("Image name updated successfully");
+    });
+    //  post  /api/images
+    app.post("/api/images", imageUploadMiddleware_1.imageMiddlewareFactory.single("image"), imageUploadMiddleware_1.handleImageFileErrors, async (req, res) => {
+        console.log("Uploaded file:", req.file);
+        console.log("Form data:", req.body);
+        try {
+            // file should be available in req.file after middleware has processed it
+            if (!req.file) {
+                res.status(400).json({ error: "No image file provided" });
+                return;
+            }
+            const { title } = req.body;
+            const imageUrl = `/uploads/${req.file.filename}`;
+            const author = req.body.author || "unknown";
+            const provider = new ImageProvider_1.ImageProvider(mongoClient);
+            const newImage = await provider.insertImage({
+                url: imageUrl,
+                title: title,
+                author: author,
+            });
+            res.status(201).json(newImage);
+        }
+        catch (err) {
+            console.log("Error uploading image:", err);
+            res.status(500).json({ error: "Image upload failed " });
+        }
     });
 }

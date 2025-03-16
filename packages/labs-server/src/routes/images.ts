@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import { MongoClient } from "mongodb";
 import { ImageProvider } from "../ImageProvider";
+import { imageMiddlewareFactory, handleImageFileErrors } from "../imageUploadMiddleware";
+
 
 export function registerImageRoutes(app: express.Application, mongoClient: MongoClient) {
     // make a new route that fetches images
@@ -23,6 +25,7 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
             res.status(500).json({ error: "Failed to fetch images" });
         }
     });
+
     // update API 
     app.patch("/api/images/:id", async (req: Request, res: Response) => {
         // exctact image id from route params
@@ -59,7 +62,36 @@ export function registerImageRoutes(app: express.Application, mongoClient: Mongo
             console.error("Error updating image name:", error);
             res.status(500).json({ error: "Failed to update image name" });
         }
-
         res.status(204).send("Image name updated successfully");
     });
+
+    //  post  /api/images
+    app.post(
+        "/api/images",
+        imageMiddlewareFactory.single("image"),
+        handleImageFileErrors,
+        async (req: Request, res: Response): Promise<void> => {
+            console.log("Uploaded file:", req.file);
+            console.log("Form data:", req.body);
+            try {
+                // file should be available in req.file after middleware has processed it
+                if (!req.file) {
+                    res.status(400).json({ error: "No image file provided"});
+                    return;
+                } 
+                const { title } = req.body;
+                const imageUrl = `/uploads/${req.file.filename}`;
+                const author = req.body.author ||  "unknown";
+                const provider = new ImageProvider(mongoClient);
+                const newImage = await provider.insertImage({
+                    url: imageUrl,
+                    title: title,
+                    author: author,
+                });
+                res.status(201).json(newImage);
+            } catch (err) {
+                console.log("Error uploading image:", err);
+                res.status(500).json({ error: "Image upload failed "});
+            }
+         });   
 }

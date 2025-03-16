@@ -14,7 +14,8 @@ export async function sendFileUploadRequest(url, formData, authToken) {
                 const errorData = JSON.parse(errorText);
                 errorMessage = errorData.message || errorMessage;
             } catch (e) {
-                console.error("Failed to parse error response", e);
+                console.error("Failed to parse error response as JSON. Raw error:", errorText);
+                errorMessage = errorText;
             }
             throw new Error(errorMessage);
         }

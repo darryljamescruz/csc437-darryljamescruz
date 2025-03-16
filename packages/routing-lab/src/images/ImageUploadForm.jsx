@@ -39,7 +39,7 @@ export function ImageUploadForm({authToken}) {
                 console.log("Upload successful:", result);
                 // clear form fields
                 e.target.reset();
-                setPreviewURL("");
+                setPreviewURL(null);
             }
         } catch (err) {
             console.error("Error uploading file", err);
@@ -62,12 +62,12 @@ export function ImageUploadForm({authToken}) {
             <div>
                 <label>
                     <span>Image title: </span>
-                    <input name="name" />
+                    <input name="title" />
                 </label>
             </div>
 
             <div> {/* Preview img element */}
-                <img style={{maxWidth: "20em"}} src={previewURL} alt="Image Preview" />
+                {previewURL ? <img style={{maxWidth: "20em"}} src={previewURL} alt="Image Preview" /> : null}
             </div>
 
             <button type="submit">Confirm upload</button>

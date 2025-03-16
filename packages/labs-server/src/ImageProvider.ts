@@ -16,6 +16,13 @@ interface UserDocument {
     email: string;
 }
 
+interface NewImage {
+    url: string;
+    title: string;
+    author: string;
+}
+
+
 export class ImageProvider {
     constructor(private readonly mongoClient: MongoClient) {}
 
@@ -66,4 +73,18 @@ export class ImageProvider {
         const result = await imagesCollection.updateOne({ _id: imageId }, { $set: { name: name }});
         return result.matchedCount;
     }
+
+    async insertImage(newImage: NewImage): Promise<any> {
+        const imagesCollectionName = process.env.IMAGES_COLLECTION_NAME;
+        if (!imagesCollectionName) {
+            throw new Error("Missing collection name in environment variables");
+        }
+        const imagesCollection = this.mongoClient.db().collection(imagesCollectionName);
+        const result = await imagesCollection.insertOne(newImage);
+        return {
+            ...newImage,
+            id: result.insertedId.toString()
+        };
+    }
+
 }
